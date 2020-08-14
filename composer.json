@@ -12,5 +12,8 @@
         }
     },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "pantheion/facade": "dev-master",
+        "pantheion/http": "dev-master"
+    }
 }
