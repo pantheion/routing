@@ -5,39 +5,35 @@ namespace Pantheion\Routing;
 use Pantheion\Http\Request;
 use Pantheion\Facade\Str;
 use Pantheion\Facade\Arr;
+use Pantheion\Facade\Middleware;
 
 class Router
 {
     protected $routes = [];
-
-    public function __construct()
-    {
-        
-    }
 
     public function get($url, $action)
     {
         return $this->addRoute("GET", $url, $action);
     }
 
-    public function post()
+    public function post($url, $action)
     {
-
+        return $this->addRoute("POST", $url, $action);
     }
 
-    public function put()
+    public function put($url, $action)
     {
-
+        return $this->addRoute("PUT", $url, $action);
     }
 
-    public function patch()
+    public function patch($url, $action)
     {
-
+        return $this->addRoute("PATCH", $url, $action);
     }
 
-    public function delete()
+    public function delete($url, $action)
     {
-
+        return $this->addRoute("DELETE", $url, $action);
     }
 
     public function group(array $options, \Closure $routes)
@@ -98,7 +94,11 @@ class Router
     {
         foreach($this->routes as $route) {
             if($route->matches($request)) {
-                return $this->respond($request, $route);
+                return Middleware::handle($request, $route, function($request) use ($route) {
+                    return app(Router::class)->respond($request, $route);
+                });
+
+                // if (!$response instanceof \Zephyr\Http\Response\RedirectResponse) Session::capture()->flushFlash();
             }
         }
 
@@ -107,7 +107,50 @@ class Router
 
     protected function respond(Request $request, Route $route) 
     {
-        
+        $controller = $route->resolveNamespace();
+        $action = $route->resolveAction()[1];
+
+        $params = $this->injectRequestInParameters(
+            $this->parameterValues($request, $route),
+            $request,
+            $controller, 
+            $action
+        );
+
+        return call_user_func_array([new $controller, $action], $params);
     }
 
+    protected function parameterValues(Request $request, Route $route) 
+    {
+        $routeParams = $route->resolveParameters();
+
+        if (Arr::empty($routeParams)) {
+            return [];
+        }
+
+        return array_filter($request->resolveUrl(), function ($value, $index) use ($routeParams) {
+            return in_array($index, array_keys($routeParams));
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    protected function injectRequestInParameters(array $params, Request $request, string $controller, string $action)
+    {
+        $method = new \ReflectionMethod($controller, $action);
+        $methodParams = $method->getParameters();
+
+        $requestPosition = null;
+        foreach($methodParams as $methodParam) {
+            if($methodParam->getClass() && Str::contains($methodParam->getClass(), Request::class)) {
+                $requestPosition = $methodParam->getPosition();
+                break;
+            }
+        }
+
+        if(is_null($requestPosition)) {
+            return $params;
+        }
+
+        array_splice($params, $requestPosition, 0, [$request]);
+        return $params;
+    }
 }

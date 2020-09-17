@@ -8,6 +8,8 @@ use Pantheion\Http\Request;
 
 class Route
 {
+    const CONTROLLERS_FOLDER = "Pantheion\\Routing\\Controller";
+
     public function __construct($method, $url, $action)
     {
         $this->method = $method;
@@ -22,9 +24,9 @@ class Route
     {
         $url = explode('/', $this->url);
         
-        return array_filter($url, function($value) {
+        return array_values(array_filter($url, function($value) {
             return $value !== "";
-        });
+        }));
     }
 
     public function resolveAction()
@@ -32,7 +34,7 @@ class Route
         return [$controller, $action] = explode(".", $this->action);
     }
 
-    protected function resolveParameters()
+    public function resolveParameters()
     {
         $url = $this->resolveUrl();
         
@@ -75,19 +77,22 @@ class Route
             return false;
         }
 
-        $requestUrl = array_filter(explode("/", $request->path), function ($value) {
-            return $value !== "";
-        });
-
-        if(count($this->resolveUrl()) !== count($requestUrl)) {
+        if(count($this->resolveUrl()) !== count($request->resolveUrl())) {
             return false;
         }
 
-        $difference = array_diff($this->resolveUrl(), $requestUrl);
+        $difference = array_diff($this->resolveUrl(), $request->resolveUrl());
         $notParameters = array_filter($difference, function($segment) {
             return !Str::contains($segment, ":") ? true : false;
         });
 
         return empty($notParameters);
+    }
+
+    public function resolveNamespace()
+    {
+        return is_null($this->namespace) ? 
+            Route::CONTROLLERS_FOLDER . "\\" . $this->resolveAction()[0] :
+            Route::CONTROLLERS_FOLDER . "\\" . $this->namespace . "\\" . $this->resolveAction()[0];
     }
 }
