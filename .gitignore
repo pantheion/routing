@@ -3,3 +3,4 @@ index.php
 Controller/
 Middleware/
 composer.lock
+app/

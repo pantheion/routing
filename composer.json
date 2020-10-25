@@ -8,12 +8,15 @@
     ],
     "autoload": {
         "psr-4": {
-            "Pantheion\\Routing\\": ""
+            "Pantheion\\Routing\\": "",
+            "App\\": "app/"
         }
     },
     "minimum-stability": "dev",
     "require": {
         "pantheion/facade": "dev-master",
-        "pantheion/http": "dev-master"
+        "pantheion/http": "dev-master",
+        "pantheion/model": "dev-master",
+        "pantheion/database": "dev-master"
     }
 }

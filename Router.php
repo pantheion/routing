@@ -2,10 +2,12 @@
 
 namespace Pantheion\Routing;
 
+use App\Model\Post;
 use Pantheion\Http\Request;
 use Pantheion\Facade\Str;
 use Pantheion\Facade\Arr;
 use Pantheion\Facade\Middleware;
+use Pantheion\Model\Model;
 
 class Router
 {
@@ -108,49 +110,53 @@ class Router
     protected function respond(Request $request, Route $route) 
     {
         $controller = $route->resolveNamespace();
-        $action = $route->resolveAction()[1];
-
-        $params = $this->injectRequestInParameters(
-            $this->parameterValues($request, $route),
-            $request,
-            $controller, 
-            $action
+        $method = new \ReflectionMethod(
+            $controller,
+            $route->resolveAction()[1]
         );
 
-        return call_user_func_array([new $controller, $action], $params);
+        return $method->invokeArgs(new $controller, $this->resolveMethodParameters($method, $request, $route));
     }
 
-    protected function parameterValues(Request $request, Route $route) 
+    protected function resolveMethodParameters(\ReflectionMethod $method, Request $request, Route $route)
     {
-        $routeParams = $route->resolveParameters();
+        $requestParametersValues = $this->getRequestParametersValues($request, $route);
 
-        if (Arr::empty($routeParams)) {
-            return [];
-        }
+        $parameters = [];
+        foreach($method->getParameters() as $parameter) {
+            if($parameter->getClass() && Str::contains($parameter->getClass(), Request::class)) {
+                $parameters[] = $request;
+                continue;
+            }
 
-        return array_filter($request->resolveUrl(), function ($value, $index) use ($routeParams) {
-            return in_array($index, array_keys($routeParams));
-        }, ARRAY_FILTER_USE_BOTH);
-    }
+            if(in_array($parameter->getName(), array_keys($requestParametersValues))) {
+                if($parameter->getClass() && $parameter->getClass()->getParentClass()->getName() === Model::class) {
+                    $id = intval($requestParametersValues[$parameter->getName()]);
+                    $class = $parameter->getClass()->getName();
 
-    protected function injectRequestInParameters(array $params, Request $request, string $controller, string $action)
-    {
-        $method = new \ReflectionMethod($controller, $action);
-        $methodParams = $method->getParameters();
+                    $parameters[] = $class::findOrFail($id);
+                    continue;
+                }
 
-        $requestPosition = null;
-        foreach($methodParams as $methodParam) {
-            if($methodParam->getClass() && Str::contains($methodParam->getClass(), Request::class)) {
-                $requestPosition = $methodParam->getPosition();
-                break;
+                $parameters[] = $requestParametersValues[$parameter->getName()];
             }
         }
 
-        if(is_null($requestPosition)) {
-            return $params;
-        }
+        return $parameters;
+    }
 
-        array_splice($params, $requestPosition, 0, [$request]);
-        return $params;
+    protected function getRequestParametersValues(Request $request, Route $route) 
+    {
+        $routeParameters = $route->resolveParameters();
+        
+        if (Arr::empty($routeParameters)) {
+            return [];
+        }
+        
+        $parameters = array_filter($request->resolveUrl(), function ($value, $index) use ($routeParameters) {
+            return in_array($index, array_keys($routeParameters));
+        }, ARRAY_FILTER_USE_BOTH);
+
+        return array_combine(array_values($routeParameters), $parameters);
     }
 }

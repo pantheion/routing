@@ -8,7 +8,7 @@ use Pantheion\Http\Request;
 
 class Route
 {
-    const CONTROLLERS_FOLDER = "Pantheion\\Routing\\Controller";
+    const CONTROLLERS_FOLDER = "App\\Controller";
 
     public function __construct($method, $url, $action)
     {
@@ -41,7 +41,7 @@ class Route
         $parameters = [];
         foreach($url as $i => $segment) {
             if(Str::contains($segment, ":")) {
-                $parameters[$i] = $segment;
+                $parameters[$i] = Str::replaceFirst(":", "", $segment);
             }
         }
 
