@@ -700,18 +700,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pantheion/engine.git",
-                "reference": "fa92458259ebe32426da7085eec7590b5657ea1e"
+                "reference": "53363bdb943089a759363d73f609320da93d8332"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pantheion/engine/zipball/fa92458259ebe32426da7085eec7590b5657ea1e",
-                "reference": "fa92458259ebe32426da7085eec7590b5657ea1e",
+                "url": "https://api.github.com/repos/pantheion/engine/zipball/53363bdb943089a759363d73f609320da93d8332",
+                "reference": "53363bdb943089a759363d73f609320da93d8332",
                 "shasum": ""
             },
             "require": {
                 "hassankhan/config": "dev-master",
                 "pantheion/database": "dev-master",
                 "pantheion/routing": "dev-master",
+                "pantheion/session": "dev-master",
                 "vlucas/phpdotenv": "^5.1@dev"
             },
             "type": "library",
@@ -728,7 +729,7 @@
                 }
             ],
             "description": "Engine base",
-            "time": "2020-10-05T23:21:05+00:00"
+            "time": "2020-10-27T11:55:54+00:00"
         },
         {
             "name": "pantheion/facade",
@@ -803,16 +804,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pantheion/helpers.git",
-                "reference": "84833066106821b0ccc9e2b5924f2d894700ab38"
+                "reference": "dbb0ffa4e7fbf538cb1bf7ea035221fcf57b31b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pantheion/helpers/zipball/84833066106821b0ccc9e2b5924f2d894700ab38",
-                "reference": "84833066106821b0ccc9e2b5924f2d894700ab38",
+                "url": "https://api.github.com/repos/pantheion/helpers/zipball/dbb0ffa4e7fbf538cb1bf7ea035221fcf57b31b3",
+                "reference": "dbb0ffa4e7fbf538cb1bf7ea035221fcf57b31b3",
                 "shasum": ""
             },
             "require": {
-                "pantheion/engine": "dev-master"
+                "pantheion/engine": "dev-master",
+                "pantheion/http": "dev-master",
+                "pantheion/session": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -828,7 +831,7 @@
                 }
             ],
             "description": "Helpers",
-            "time": "2020-10-05T23:25:30+00:00"
+            "time": "2020-10-28T20:26:18+00:00"
         },
         {
             "name": "pantheion/http",
@@ -836,16 +839,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pantheion/http.git",
-                "reference": "277cc47df6af9fbfddf7302df4c8ebd9ded8f197"
+                "reference": "a64843ed1d7def07083b48741e4f5635053baece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pantheion/http/zipball/277cc47df6af9fbfddf7302df4c8ebd9ded8f197",
-                "reference": "277cc47df6af9fbfddf7302df4c8ebd9ded8f197",
+                "url": "https://api.github.com/repos/pantheion/http/zipball/a64843ed1d7def07083b48741e4f5635053baece",
+                "reference": "a64843ed1d7def07083b48741e4f5635053baece",
                 "shasum": ""
             },
             "require": {
-                "pantheion/filesystem": "dev-master"
+                "pantheion/filesystem": "dev-master",
+                "pantheion/session": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -861,7 +865,7 @@
                 }
             ],
             "description": "HTTP layer",
-            "time": "2020-10-05T23:25:56+00:00"
+            "time": "2020-10-28T20:18:51+00:00"
         },
         {
             "name": "pantheion/middleware",
@@ -930,6 +934,40 @@
             ],
             "description": "Model ORM",
             "time": "2020-10-23T13:29:50+00:00"
+        },
+        {
+            "name": "pantheion/session",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheion/session.git",
+                "reference": "383db2efe605a98bd728cfdaf7fb71f9e1dcdab9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheion/session/zipball/383db2efe605a98bd728cfdaf7fb71f9e1dcdab9",
+                "reference": "383db2efe605a98bd728cfdaf7fb71f9e1dcdab9",
+                "shasum": ""
+            },
+            "require": {
+                "pantheion/facade": "dev-master",
+                "pantheion/filesystem": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pantheion\\Session\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Pedro Miguel",
+                    "email": "pedro.aos19@gmail.com"
+                }
+            ],
+            "description": "Session handler package",
+            "time": "2020-10-28T17:19:38+00:00"
         },
         {
             "name": "pantheion/utils",
@@ -1168,12 +1206,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41"
+                "reference": "fade6deebd931cfd7a544f68479405a6a08979a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/f4ba089a5b6366e453971d3aad5fe8e897b37f41",
-                "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/fade6deebd931cfd7a544f68479405a6a08979a3",
+                "reference": "fade6deebd931cfd7a544f68479405a6a08979a3",
                 "shasum": ""
             },
             "require": {
@@ -1185,7 +1223,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.21-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -1236,7 +1274,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2020-10-26T13:35:45+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1244,12 +1282,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "39d483bdf39be819deabf04ec872eb0b2410b531"
+                "reference": "401c9d9d3400c53a8f1a39425f0543406c137a43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/39d483bdf39be819deabf04ec872eb0b2410b531",
-                "reference": "39d483bdf39be819deabf04ec872eb0b2410b531",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/401c9d9d3400c53a8f1a39425f0543406c137a43",
+                "reference": "401c9d9d3400c53a8f1a39425f0543406c137a43",
                 "shasum": ""
             },
             "require": {
@@ -1261,7 +1299,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.21-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -1313,7 +1351,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2020-10-26T13:35:45+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -1321,12 +1359,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "e70aa8b064c5b72d3df2abd5ab1e90464ad009de"
+                "reference": "3a11f3dfb34ad50f978cb2b8cf936933b87739aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/e70aa8b064c5b72d3df2abd5ab1e90464ad009de",
-                "reference": "e70aa8b064c5b72d3df2abd5ab1e90464ad009de",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/3a11f3dfb34ad50f978cb2b8cf936933b87739aa",
+                "reference": "3a11f3dfb34ad50f978cb2b8cf936933b87739aa",
                 "shasum": ""
             },
             "require": {
@@ -1335,7 +1373,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.21-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -1393,7 +1431,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2020-10-26T13:35:45+00:00"
         },
         {
             "name": "symfony/translation",

@@ -97,10 +97,8 @@ class Router
         foreach($this->routes as $route) {
             if($route->matches($request)) {
                 return Middleware::handle($request, $route, function($request) use ($route) {
-                    return app(Router::class)->respond($request, $route);
+                    return app(Router::class)->respond($request, $route)->send();
                 });
-
-                // if (!$response instanceof \Zephyr\Http\Response\RedirectResponse) Session::capture()->flushFlash();
             }
         }
 

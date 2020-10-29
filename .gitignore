@@ -4,3 +4,4 @@ Controller/
 Middleware/
 composer.lock
 app/
+storage/
