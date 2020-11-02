@@ -2,11 +2,12 @@
 
 namespace Pantheion\Routing;
 
-use App\Model\Post;
 use Pantheion\Http\Request;
+use Pantheion\Http\Response;
 use Pantheion\Facade\Str;
 use Pantheion\Facade\Arr;
 use Pantheion\Facade\Middleware;
+use Pantheion\Http\Cookie;
 use Pantheion\Model\Model;
 
 class Router
@@ -97,7 +98,14 @@ class Router
         foreach($this->routes as $route) {
             if($route->matches($request)) {
                 return Middleware::handle($request, $route, function($request) use ($route) {
-                    return app(Router::class)->respond($request, $route)->send();
+                    $response = app(Router::class)->respond($request, $route);
+
+                    if(is_string($response)) {
+                        $response = new Response($response);
+                    }
+
+                    $response->cookie(new Cookie('zephyr_session', $request->session()->id, 7200));    
+                    $response->send();
                 });
             }
         }
